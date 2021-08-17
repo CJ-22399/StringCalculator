@@ -25,7 +25,6 @@ if __name__ == "__main__":
     ]
     string_calculator = StringCalcultor()
     for test in test_cases:
-        print(f"{test[0]} -- {string_calculator.Add(test[0])}")
         if test[1] == 0:
             assert string_calculator.Add(test[0]) is None , f"Failed Test Case=> {test[0]}"
         elif test[1] == 1:

@@ -8,8 +8,8 @@ class StringCalcultor:
         if len(numbers) > 0:
             delimiter = self.check_delimiter(numbers) if self.check_delimiter(numbers) is not None else ","
             if delimiter in numbers:
-                if "\n" in numbers:
-                    try:
+                try:
+                    if "\n" in numbers:
                         total = 0
                         for line in numbers.split("\n"):
                             if line.startswith("//"):
@@ -20,13 +20,11 @@ class StringCalcultor:
                                 raise ValueError
                             
                         return total
-                    except ValueError:
-                        return None
-                else:
-                    try:
+                    else:
                         return sum(list(map(int,numbers.split(delimiter))))
-                    except ValueError:
-                        return None
+                except ValueError:
+                    return None
+                
             else:
                 if len(numbers) == 1:
                     try:
