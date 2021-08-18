@@ -1,19 +1,32 @@
+import regex as re
+from utils import is_digit
 from Exceptions import negativeNum
 class StringCalcultor:
     def __init__(self):
         self.count = 0
-    def check_delimiter(self,string):
+    def Get_delimiter(self,string):
         lines = string.split("\n")        
         if len(lines) > 1:
-            return lines[0][2:] if lines[0].startswith("//") else None
+            if len(lines[0]) == 3:
+                return lines[0][-1] if lines[0].startswith("//") else None
+            elif lines[0].startswith("//"):
+                delimiters =  re.findall(r'\[.+?\]', lines[0])
+                if len(delimiters) == 1 :
+                    return delimiters[0][1:len(delimiters[0])-1]
+                elif len(delimiters) > 1:
+                    for i in range(len(delimiters)):
+                        delimiters[i] = delimiters[i][1:len(delimiters[i])-1]
+                    return delimiters
         return None
     def GetCalledCount(self):
         return self.count
     def Add(self,numbers):
         self.count += 1
         if len(numbers) > 0:
-            delimiter = self.check_delimiter(numbers) if self.check_delimiter(numbers) is not None else ","
-            if delimiter in numbers:
+            delimiter = self.Get_delimiter(numbers) 
+            if delimiter  is None:
+                delimiter = ","
+            if type(delimiter) == str and delimiter in numbers :
                 try:
                     if "\n" in numbers:
                         total = 0
@@ -44,6 +57,27 @@ class StringCalcultor:
                 except  negativeNum as e:
                     print(e)
                     return None
+            elif type(delimiter) == list:
+                stack = numbers.split("\n")[1:] if "\n" in numbers else []
+                total = 0
+                while len(stack) > 0:
+                    string = stack.pop()
+                    if not is_digit(string):
+                        for D in delimiter:
+                            if D in string:
+                                stack.extend(string.split(D))
+                                break                        
+                    else:
+                        try:
+                            if int(string) > 0:
+                                total+= int(string) if int(string) <= 1000 else 0
+                            else:
+                                raise negativeNum(numbers,delimiter)
+                        except negativeNum as e:
+                            print(e)
+                            return None
+                return total
+                        
             else:
                 if len(numbers) == 1:
                     try:

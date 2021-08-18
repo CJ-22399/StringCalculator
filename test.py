@@ -30,14 +30,20 @@ if __name__ == "__main__":
         ["1000,200,10,2000",1],
         ["1000,2000,1000,2000",1],
         ["//*\n100*1200*100\n100*200*300",1],
+        ["//[****]\n1****2****3\n4****5****6",1],
+        ["//[!!]\n1!!2!!3\n4!!5!!6",1],
+        ["//!!\n1!!2!!3\n4!!5!!6",0],
+        ["//[*][!][@]\n1*2@3\n4@5!6",1],
+        ["//[***][!!!][@@]\n1***2@@3\n4@@5!!!6\n1***2",1],
+        ["//[@@@][!][**]\n1@@@-30!-3**7**8**-9",0]
         
     ]
     string_calculator = StringCalcultor()
-    for test in test_cases:
+    for counter,test in enumerate(test_cases):
         if test[1] == 0:
             assert string_calculator.Add(test[0]) is None , f"Failed Test Case=> {test[0]}"
         elif test[1] == 1:
             assert string_calculator.Add(test[0]) is not None , f"Failed Test Case=> {test[0]}"
     assert len(test_cases) == string_calculator.GetCalledCount() , "Get Called Count Failed"
     print(f"Number of time Add Invoke :{string_calculator.GetCalledCount()}")
-    print("all Test Done.")
+    print("All Test Passed.")
